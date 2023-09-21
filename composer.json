@@ -1,7 +1,7 @@
 {
-    "name": "laravel/laravel",
+    "name": "Raiden Express Solution",
     "type": "project",
-    "description": "The Laravel Framework.",
+    "description": "Une application de Tracking de colis.",
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "require": {
