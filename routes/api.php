@@ -25,16 +25,10 @@ Route::get('/', function (Request $request){
     ]);
 });
 
-Route::fallback(function () {
-    return response()->json([
-        'error' => true,
-        'message' => 'Route not found'
-    ], 404);
-});
 
-Route::prefix('v1')->group(function () {
+Route::prefix('v1')->middleware('auth:admin-api')->group(function () {
     
-    Route::prefix('')->middleware('auth:admin-api')->group(function () {
+    Route::prefix('')->group(function () {
         
         // TypeUser roads
         Route::prefix('/typeuser')->group( function () {
@@ -61,4 +55,11 @@ Route::prefix('v1')->group(function () {
                     // ->middleware(['validation.user.add']);
     });
 
+});
+
+Route::fallback(function () {
+    return response()->json([
+        'error' => true,
+        'message' => 'Route not found'
+    ], 404);
 });
