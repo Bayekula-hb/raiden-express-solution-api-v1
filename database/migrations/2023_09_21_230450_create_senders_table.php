@@ -18,7 +18,7 @@ class CreateSendersTable extends Migration
             $table->string('first_name', 50);
             $table->string('middle_name', 50)->nullable();
             $table->string('last_name', 50);
-            $table->integer('phone_number', 14);
+            $table->integer('phone_number');
             $table->string('email')->nullable()->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('physical_address', 200);

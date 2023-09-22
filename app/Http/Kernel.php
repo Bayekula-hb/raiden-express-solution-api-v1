@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\API\TypeUser\TypeUserValidationMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -64,5 +65,8 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'validation.typeuser.add'=> \App\Http\Middleware\API\TypeUser\TypeUserValidationMiddleware::class,
+        'validation.user.add'=> \App\Http\Middleware\API\User\UserValidationMiddleware::class,
+        'validation.parcel.id'=> \App\Http\Middleware\API\Parcel\ParcelValidationCheckMiddleware::class,
     ];
 }

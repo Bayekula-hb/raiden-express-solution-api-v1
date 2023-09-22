@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\API\ParcelController;
+use App\Http\Controllers\API\TypeUserController;
+use App\Http\Controllers\API\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +25,35 @@ Route::get('/', function (Request $request){
     ]);
 });
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
+Route::fallback(function () {
+    return response()->json([
+        'error' => true,
+        'message' => 'Route not found'
+    ], 404);
+});
+
+Route::prefix('v1')
+// ->middleware('auth:admin-api')
+->group(function () {
+    
+    // TypeUser roads
+    Route::prefix('/typeuser')->group( function () {
+        Route::get("", [TypeUserController::class, 'index']);
+        Route::post("", [TypeUserController::class, 'store'])
+                    ->middleware(['validation.typeuser.add']);
+    });
+    
+    // User roads
+    Route::prefix('/user')->group( function () {
+        Route::get("", [UserController::class, 'index']);
+        Route::post("", [UserController::class, 'store'])
+                    ->middleware(['validation.user.add']);
+    });
+
+    // User roads
+    Route::prefix('/check_parcel')->group( function () {
+        Route::post("", [ParcelController::class, 'check_parcel']);
+                    // ->middleware(['validation.user.add']);
+    });
+
+});

@@ -18,7 +18,7 @@ class CreateParcelsTable extends Migration
     {
         Schema::create('parcels', function (Blueprint $table) {
             $table->id();
-            $table->array('items');
+            $table->json('items');
             $table->string('otp', 10);
             $table->string('weight', 50);
             $table->string('volume', 50);
