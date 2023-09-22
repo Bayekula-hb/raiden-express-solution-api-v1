@@ -32,23 +32,28 @@ Route::fallback(function () {
     ], 404);
 });
 
-Route::prefix('v1')
-// ->middleware('auth:admin-api')
-->group(function () {
+Route::prefix('v1')->group(function () {
     
-    // TypeUser roads
-    Route::prefix('/typeuser')->group( function () {
-        Route::get("", [TypeUserController::class, 'index']);
-        Route::post("", [TypeUserController::class, 'store'])
-                    ->middleware(['validation.typeuser.add']);
+    Route::prefix('')->middleware('auth:admin-api')->group(function () {
+        
+        // TypeUser roads
+        Route::prefix('/typeuser')->group( function () {
+            Route::get("", [TypeUserController::class, 'index']);
+            Route::post("", [TypeUserController::class, 'store'])
+                        ->middleware(['validation.typeuser.add']);
+        });
+        
+        // User roads
+        Route::prefix('/user')->group( function () {
+            Route::get("", [UserController::class, 'index']);
+            Route::post("", [UserController::class, 'store'])
+                        ->middleware(['validation.user.add']);
+        });
+
     });
-    
-    // User roads
-    Route::prefix('/user')->group( function () {
-        Route::get("", [UserController::class, 'index']);
-        Route::post("", [UserController::class, 'store'])
-                    ->middleware(['validation.user.add']);
-    });
+
+    //Auth
+    Route::post('/auth/login', [UserController::class, 'auth'])->middleware(['validation.auth.user']);
 
     // User roads
     Route::prefix('/check_parcel')->group( function () {

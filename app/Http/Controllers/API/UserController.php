@@ -116,4 +116,51 @@ class UserController extends Controller
     {
         //
     }
+
+    public function auth(Request $request)
+    {
+        try {
+            $user_find = User::where('email', $request->username)->orWhere('first_name', $request->username)->first();
+            
+            if( $user_find){
+                if (Hash::check($request->password, $user_find->password)) {
+ 
+                    $token = $user_find->createToken($user_find->email);
+
+                    return response()->json([
+                        'error'=>false,
+                        'message'=> 'User is logging successful', 
+                        'data'=>[
+                           'token' => $token->plainTextToken,
+                           'name' => $token->accessToken->name,
+                           'first_name' => $user_find->first_name,
+                           'last_name' => $user_find->last_name,
+                           'phone_number' => $user_find->phone_number,
+                           'email' => $user_find->email,
+                           'gender' => $user_find->gender,
+                           'id' => $user_find->id,
+                           'type_account' => $user_find->type_user_id,
+                        ], 
+                    ], 200);
+                } else {
+                    return response()->json([
+                        'error'=>true,
+                        'message'=> 'The password is incorrect', 
+                    ], 400);
+                }
+            }else{
+                return response()->json([
+                    'error'=>true,
+                    'message'=> 'This user is not found : '.$request->username, 
+                ], 400);
+
+            }
+        } catch (Throwable $e) {
+
+            return response()->json([
+                'error'=>true,
+                'message'=> 'Something went wrong, please try again',
+            ], 400);
+        }
+    }
 }
