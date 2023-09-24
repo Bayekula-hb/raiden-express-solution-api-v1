@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\PackageController;
 use App\Http\Controllers\API\ParcelController;
 use App\Http\Controllers\API\TypeUserController;
 use App\Http\Controllers\API\UserController;
@@ -26,9 +27,9 @@ Route::get('/', function (Request $request){
 });
 
 
-Route::prefix('v1')->middleware('auth:admin-api')->group(function () {
+Route::prefix('v1')->group(function () {
     
-    Route::prefix('')->group(function () {
+    Route::prefix('')->middleware('auth:admin-api')->group(function () {
         
         // TypeUser roads
         Route::prefix('/typeuser')->group( function () {
@@ -42,6 +43,16 @@ Route::prefix('v1')->middleware('auth:admin-api')->group(function () {
             Route::get("", [UserController::class, 'index']);
             Route::post("", [UserController::class, 'store'])
                         ->middleware(['validation.user.add']);
+        });
+
+        //Parcel roads
+        Route::prefix('/parcel')->group(function () {
+            Route::get("", [ParcelController::class, 'index']);
+        });
+
+        //Package roads
+        Route::prefix('/package')->group(function () {
+            Route::get("", [PackageController::class, 'index']);
         });
 
     });

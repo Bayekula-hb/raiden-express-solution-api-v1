@@ -20,6 +20,7 @@ class CreatePackagesTable extends Migration
             $table->text('description')->nullable();
             $table->date('departure_date')->nullable();
             $table->date('arrival_date')->nullable();
+            $table->json('step')->nullable();
             $table->timestamps();
         });
     }

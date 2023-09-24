@@ -18,6 +18,7 @@ class Package extends Model
         'description',
         'departure_date',
         'arrival_date',
+        'step',
     ];
 
     protected $hidden =[];

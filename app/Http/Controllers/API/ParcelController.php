@@ -15,7 +15,21 @@ class ParcelController extends Controller
      */
     public function index()
     {
-        //
+        try {   
+            $parcels = Parcel::orderBy('id', 'desc')->get();
+
+            return response()->json([
+                'error'=>false,
+                'message'=> 'Data received successfully', 
+                'data'=>$parcels
+            ], 200);
+        } catch (Throwable $e) {
+            return response()->json([
+                'error'=>true,
+                'message' => 'Request failed, please try again',
+                'data' => $e,
+            ], 400);
+        }
     }
 
     /**
