@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\ColiPackageController;
 use App\Http\Controllers\API\PackageController;
 use App\Http\Controllers\API\ParcelController;
 use App\Http\Controllers\API\TypeUserController;
@@ -53,6 +54,15 @@ Route::prefix('v1')->group(function () {
         //Package roads
         Route::prefix('/package')->group(function () {
             Route::get("", [PackageController::class, 'index']);
+            Route::post("", [PackageController::class, 'store'])
+                        ->middleware(['validation.package']);
+        });
+
+        //ColiParcel roads
+        Route::prefix('/coli-parcel')->group(function () {
+            Route::get("", [ColiPackageController::class, 'index']);
+            Route::post("", [ColiPackageController::class, 'store'])
+                    ->middleware(['validation.coli']);
         });
 
     });

@@ -24,7 +24,7 @@ class ColiPackage extends Model
         'sender',
         'receives',
         'destination',
-        'packages',
+        'package_id',
     ];
 
     protected $hidden = [];

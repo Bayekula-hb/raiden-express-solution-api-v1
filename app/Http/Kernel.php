@@ -69,5 +69,7 @@ class Kernel extends HttpKernel
         'validation.typeuser.add'=> \App\Http\Middleware\API\TypeUser\TypeUserValidationMiddleware::class,
         'validation.user.add'=> \App\Http\Middleware\API\User\UserValidationMiddleware::class,
         'validation.parcel.id'=> \App\Http\Middleware\API\Parcel\ParcelValidationCheckMiddleware::class,
+        'validation.coli'=> \App\Http\Middleware\API\Parcel\ColiPackageValidationMiddleware::class,
+        'validation.package'=> \App\Http\Middleware\API\Package\PackageValidationMiddleware::class,
     ];
 }

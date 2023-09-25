@@ -23,8 +23,13 @@ class Package extends Model
 
     protected $hidden =[];
 
-    public function users(): HasMany
+    public function parcels(): HasMany
     {
         return $this->HasMany(Parcel::class);
+    }
+
+    public function coli_packages(): HasMany
+    {
+        return $this->HasMany(ColiPackage::class);
     }
 }

@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Models\Package;
+use App\Models\ColiPackage;
 use Illuminate\Http\Request;
 use Throwable;
 
-class PackageController extends Controller
+class ColiPackageController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,12 +17,12 @@ class PackageController extends Controller
     public function index()
     {
         try {   
-            $parcels = Package::orderBy('id', 'desc')->get();
+            $coli_packages = ColiPackage::orderBy('id', 'desc')->get();
 
             return response()->json([
                 'error'=>false,
                 'message'=> 'Data received successfully', 
-                'data'=>$parcels
+                'data'=>$coli_packages
             ], 200);
         } catch (Throwable $e) {
             return response()->json([
@@ -41,21 +41,34 @@ class PackageController extends Controller
      */
     public function store(Request $request)
     {
-        // $step_cleaning = str_replace("'", "\"" , $request->step);
+        // return $request->items;
         try {
-            $package = Package::create([
-                'name_package' => $request->name_package,
-                'destination_package' => $request->destination_package,
-                'description' => $request->description,
-                'departure_date' => $request->departure_date,
-                'arrival_date' => $request->arrival_date,
-                'step' =>  $request->step,
+            $timestamp = time();
+            $random_value = substr(str_shuffle('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'),1,4);
+            $random_value_timestamp = substr(str_shuffle($timestamp),1,3);
+            $random =  $random_value . $random_value_timestamp;
+            
+            $otp = substr(str_shuffle($timestamp),1,6);
+
+            $colis = ColiPackage::create([
+                'otp' => $otp,
+                'items' => $request->items,
+                'weight' => $request->weight,
+                'volume' => $request->volume,
+                'description' => $request->description ? $request->description : '',
+                'parcel_code' => $random,
+                'user_id' => $request->user()->id,
+                'sender' => $request->sender,
+                'receives' => $request->receives,
+                'price' => $request->price,
+                'destination' => $request->destination,
+                'package_id' => $request->package_id,
             ]);
 
             return response()->json([
                 'error'=>false,
-                'message'=> 'Package created successfully', 
-                'data'=>$package
+                'message'=> 'Colis created successfully', 
+                'data'=>$colis
             ], 200); 
         } catch (Throwable $e) {
             return response()->json([

@@ -27,7 +27,7 @@ class CreateColiPackagesTable extends Migration
             $table->foreignIdFor(User::class)
                   ->references('id')
                   ->on('users');
-            $table->text('sender');
+            $table->json('sender');
             $table->json('receives');
             $table->text('destination');
             $table->foreignIdFor(Package::class)
