@@ -61,8 +61,12 @@ Route::prefix('v1')->group(function () {
         //ColiParcel roads
         Route::prefix('/coli-parcel')->group(function () {
             Route::get("", [ColiPackageController::class, 'index']);
+            Route::get("/{id}", [ColiPackageController::class, 'show']);
             Route::post("", [ColiPackageController::class, 'store'])
                     ->middleware(['validation.coli']);
+            Route::put("/{id}", [ColiPackageController::class, 'update'])
+                    ->middleware(['validation.coli']);                    
+            Route::delete("/{id}", [ColiPackageController::class, 'destroy']);
         });
 
     });
@@ -74,6 +78,10 @@ Route::prefix('v1')->group(function () {
     Route::prefix('/check_parcel')->group( function () {
         Route::post("", [ParcelController::class, 'check_parcel']);
                     // ->middleware(['validation.user.add']);
+    });
+    // User check roads 
+    Route::prefix('/check-coli')->group( function () {
+        Route::post("", [ColiPackageController::class, 'check_colis']);
     });
 
 });

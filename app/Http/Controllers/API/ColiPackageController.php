@@ -41,7 +41,6 @@ class ColiPackageController extends Controller
      */
     public function store(Request $request)
     {
-        // return $request->items;
         try {
             $timestamp = time();
             $random_value = substr(str_shuffle('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'),1,4);
@@ -87,7 +86,28 @@ class ColiPackageController extends Controller
      */
     public function show($id)
     {
-        //
+        try {
+            if(intval($id, 10) != 0) {
+                $coli_package = ColiPackage::find($id);
+
+                return response()->json([
+                    'error'=>false,
+                    'message' => 'Coli package found with successfully',
+                    'data'=>$coli_package
+                ], 400);
+            }else{
+                return response()->json([
+                    'error'=>true,
+                    'message' => 'Request failed, your parameter is not correct',
+                ], 400); 
+            }
+        }catch (Throwable $th) {
+            return response()->json([
+                'error'=>true,
+                'message' => 'Request failed, please try again',
+                'info' => $th,
+            ], 400); 
+        }
     }
 
     /**
@@ -99,7 +119,57 @@ class ColiPackageController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            if(intval($id, 10) != 0) {
+                $coli_package = ColiPackage::find($id);
+                $user = $request->user();
+
+                if(!$coli_package){
+                    return response()->json([
+                        'error'=>true,
+                        'message' => 'Request failed, this edition is not found.',
+                    ], 400); 
+                }else{
+
+                    if($coli_package->user_id == $user->id || $user->type_user_id == (1 || 2)) {
+                        
+                        $coli_package->items = $request->items;
+                        $coli_package->weight = $request->weight;
+                        $coli_package->volume = $request->volume;
+                        $coli_package->description = $request->description;
+                        $coli_package->sender = $request->sender;
+                        $coli_package->receives = $request->receives;
+                        $coli_package->price = $request->price;
+                        $coli_package->destination = $request->destination;
+                        $coli_package->package_id = $request->package_id;
+
+                        $coli_package->save();
+
+                        return response()->json([
+                            'error'=>false,
+                            'message'=> 'Coli-Package Updated successfully', 
+                            'data'=>$coli_package
+                        ], 200);
+                    }else{
+                        return response()->json([
+                            'error'=>true,
+                            'message'=> 'You can\'t to updated this coli package',
+                        ], 404);
+                    }  
+                }
+            }else{
+                return response()->json([
+                    'error'=>true,
+                    'message' => 'Request failed, your parameter is not correct',
+                ], 400); 
+            }
+        } catch (Throwable $th) {
+            return response()->json([
+                'error'=>true,
+                'message' => 'Request failed, please try again',
+                'info' => $th,
+            ], 400); 
+        }
     }
 
     /**
@@ -108,8 +178,74 @@ class ColiPackageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        try {
+            if(intval($id, 10) != 0) {
+                $coli_package = ColiPackage::find($id);
+                $user = $request->user();
+
+                if(!$coli_package){
+                    return response()->json([
+                        'error'=>true,
+                        'message' => 'Request failed, this edition is not found.',
+                    ], 400); 
+                }else{
+                    if($coli_package->user_id == $user->id || $user->type_user_id == (1 || 2)) {
+                        $coli_package->delete();
+                        return response()->json([
+                            'error'=>false,
+                            'message'=> 'Edition Deleted successfully', 
+                            'data'=>$coli_package
+                        ], 200);
+                    }else{
+                        return response()->json([
+                            'error'=>true,
+                            'message'=> 'You can\'t to updated this coli package',
+                        ], 404);
+                    }  
+                }
+            }else{
+                return response()->json([
+                    'error'=>true,
+                    'message' => 'Request failed, your parameter is not correct',
+                ], 400); 
+            }
+        } catch (Throwable $th) {
+            return response()->json([
+                'error'=>true,
+                'message' => 'Request failed, please try again',
+                'info' => $th,
+            ], 400); 
+        }
+    }
+
+    
+    public function check_colis(Request $request)
+    {
+        try {
+            $check_coli_package = ColiPackage::where('parcel_code', $request->code_parcel)->first();
+
+            if(!$check_coli_package){
+                return response()->json([
+                    'error'=>false,
+                    'message' => 'This parcel is not found.', 
+                    'data'=>$check_coli_package
+                ], 200); 
+            }else{  
+                return response()->json([
+                    'error'=>false,
+                    'message'=> 'Parcel found with successfully', 
+                    'data'=>$check_coli_package
+                ], 200);
+            }
+            
+        } catch (Throwable $th) {
+            return response()->json([
+                'error'=>true,
+                'message' => 'Request failed, please try again',
+                'info' => $th,
+            ], 400); 
+        }
     }
 }

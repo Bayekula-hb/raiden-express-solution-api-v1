@@ -21,7 +21,7 @@ class CreateColiPackagesTable extends Migration
             $table->string('otp', 10);
             $table->string('weight', 50);
             $table->string('volume', 50);
-            $table->text('description');
+            $table->text('description')->nullable(true);
             $table->string('parcel_code', 20);
             $table->string('price', 20);
             $table->foreignIdFor(User::class)
