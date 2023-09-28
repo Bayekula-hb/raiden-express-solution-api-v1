@@ -1,5 +1,5 @@
 {
-    "name": "Raiden Express Solution",
+    "name": "raiden/raiden-express-solution",
     "type": "project",
     "description": "Une application de Tracking de colis.",
     "keywords": ["framework", "laravel"],
