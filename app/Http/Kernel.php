@@ -71,5 +71,6 @@ class Kernel extends HttpKernel
         'validation.parcel.id'=> \App\Http\Middleware\API\Parcel\ParcelValidationCheckMiddleware::class,
         'validation.coli'=> \App\Http\Middleware\API\Parcel\ColiPackageValidationMiddleware::class,
         'validation.package'=> \App\Http\Middleware\API\Package\PackageValidationMiddleware::class,
+        'cors'=> \App\Http\Middleware\Cors::class,
     ];
 }

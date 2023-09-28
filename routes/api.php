@@ -25,12 +25,12 @@ Route::get('/', function (Request $request){
         'version' => 'C\'est la version beta de cet API merci',
         'Developpeur' => 'Developper par hobedbayekula@gmail.com',
     ]);
-});
+})->middleware('cors');
 
 
 Route::prefix('v1')->group(function () {
     
-    Route::prefix('')->middleware('auth:admin-api')->group(function () {
+    Route::prefix('')->middleware(['cors','auth:admin-api'])->group(function () {
         
         // TypeUser roads
         Route::prefix('/typeuser')->group( function () {
