@@ -94,12 +94,12 @@ class ColiPackageController extends Controller
                     'error'=>false,
                     'message' => 'Coli package found with successfully',
                     'data'=>$coli_package
-                ], 400);
+                ], 200);
             }else{
                 return response()->json([
                     'error'=>true,
                     'message' => 'Request failed, your parameter is not correct',
-                ], 400); 
+                ], 200); 
             }
         }catch (Throwable $th) {
             return response()->json([

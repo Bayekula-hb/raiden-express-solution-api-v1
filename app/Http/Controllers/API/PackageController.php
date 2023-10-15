@@ -33,6 +33,25 @@ class PackageController extends Controller
         }
     }
 
+    public function getLimitedPackage()
+    {
+        try {   
+            $parcels = Package::orderBy('id', 'desc')->limit(10)->get();
+
+            return response()->json([
+                'error'=>false,
+                'message'=> 'Data received successfully', 
+                'data'=>$parcels
+            ], 200);
+        } catch (Throwable $e) {
+            return response()->json([
+                'error'=>true,
+                'message' => 'Request failed, please try again',
+                'data' => $e,
+            ], 400);
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      *

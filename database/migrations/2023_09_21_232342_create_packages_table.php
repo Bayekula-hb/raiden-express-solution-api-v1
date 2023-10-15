@@ -15,7 +15,7 @@ class CreatePackagesTable extends Migration
     {
         Schema::create('packages', function (Blueprint $table) {
             $table->id();
-            $table->string('name_package', 20);
+            $table->string('name_package', 100);
             $table->string('destination_package', 50);
             $table->text('description')->nullable();
             $table->date('departure_date')->nullable();

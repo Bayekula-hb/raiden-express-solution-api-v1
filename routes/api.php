@@ -54,6 +54,7 @@ Route::prefix('v1')->group(function () {
         //Package roads
         Route::prefix('/package')->group(function () {
             Route::get("", [PackageController::class, 'index']);
+            Route::get("/limit", [PackageController::class, 'getLimitedPackage']);
             Route::post("", [PackageController::class, 'store'])
                         ->middleware(['validation.package']);
         });
