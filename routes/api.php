@@ -57,6 +57,8 @@ Route::prefix('v1')->group(function () {
             Route::get("/limit", [PackageController::class, 'getLimitedPackage']);
             Route::post("", [PackageController::class, 'store'])
                         ->middleware(['validation.package']);
+            Route::put("/{id}", [PackageController::class, 'update'])
+                    ->middleware(['validation.package']);  
         });
 
         //ColiParcel roads

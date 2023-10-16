@@ -60,7 +60,6 @@ class PackageController extends Controller
      */
     public function store(Request $request)
     {
-        // $step_cleaning = str_replace("'", "\"" , $request->step);
         try {
             $package = Package::create([
                 'name_package' => $request->name_package,
@@ -105,7 +104,43 @@ class PackageController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            if(intval($id, 10) != 0) {
+                $package = Package::find($id);
+                if(!$package){
+                    return response()->json([
+                        'error'=>true,
+                        'message' => 'Request failed, this package is not found.',
+                    ], 400); 
+                }else {
+                    $package->name_package = $request->name_package;
+                    $package->destination_package = $request->destination_package;
+                    $package->description = $request->description;
+                    $package->departure_date = $request->departure_date;
+                    $package->arrival_date = $request->arrival_date;
+                    $package->step = $request->step;
+
+                    $package->save();
+
+                    return response()->json([
+                        'error'=>false,
+                        'message'=> 'Package Updated successfully', 
+                        'data'=>$package
+                    ], 200);
+                }
+            }else{
+                return response()->json([
+                    'error'=>true,
+                    'message' => 'Request failed, your parameter is not correct',
+                ], 400); 
+            }            
+        } catch (Throwable $th) {
+            return response()->json([
+                'error'=>true,
+                'message' => 'Request failed, please try again',
+                'info' => $th,
+            ], 400);
+        }
     }
 
     /**

@@ -127,7 +127,7 @@ class ColiPackageController extends Controller
                 if(!$coli_package){
                     return response()->json([
                         'error'=>true,
-                        'message' => 'Request failed, this edition is not found.',
+                        'message' => 'Request failed, this Colis is not found.',
                     ], 400); 
                 }else{
 
