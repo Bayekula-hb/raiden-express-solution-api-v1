@@ -55,6 +55,7 @@ Route::prefix('v1')->group(function () {
         Route::prefix('/package')->group(function () {
             Route::get("", [PackageController::class, 'index']);
             Route::get("/limit", [PackageController::class, 'getLimitedPackage']);
+            Route::get("/{id}", [PackageController::class, 'show']);
             Route::post("", [PackageController::class, 'store'])
                         ->middleware(['validation.package']);
             Route::put("/{id}", [PackageController::class, 'update'])
@@ -62,7 +63,7 @@ Route::prefix('v1')->group(function () {
         });
 
         //ColiParcel roads
-        Route::prefix('/coli-parcel')->group(function () {
+        Route::prefix('/coli-parcel')->group(function () {  
             Route::get("", [ColiPackageController::class, 'index']);
             Route::get("/{id}", [ColiPackageController::class, 'show']);
             Route::post("", [ColiPackageController::class, 'store'])

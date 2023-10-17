@@ -36,12 +36,12 @@ class PackageController extends Controller
     public function getLimitedPackage()
     {
         try {   
-            $parcels = Package::orderBy('id', 'desc')->limit(10)->get();
+            $packages = Package::orderBy('id', 'desc')->limit(10)->get();
 
             return response()->json([
                 'error'=>false,
                 'message'=> 'Data received successfully', 
-                'data'=>$parcels
+                'data'=>$packages
             ], 200);
         } catch (Throwable $e) {
             return response()->json([
@@ -92,7 +92,28 @@ class PackageController extends Controller
      */
     public function show($id)
     {
-        //
+        try {
+            if(intval($id, 10) != 0) {
+                $package = Package::find($id);
+
+                return response()->json([
+                    'error'=>false,
+                    'message' => 'Package found with successfully',
+                    'data'=>$package
+                ], 200);
+            }else{
+                return response()->json([
+                    'error'=>true,
+                    'message' => 'Request failed, your parameter is not correct',
+                ], 200); 
+            }
+        }catch (Throwable $e) {
+            return response()->json([
+                'error'=>true,
+                'message' => 'Request failed, please try again',
+                'info' => $e,
+            ], 400); 
+        }
     }
 
     /**
