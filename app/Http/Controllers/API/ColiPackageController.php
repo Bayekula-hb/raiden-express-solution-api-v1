@@ -227,6 +227,50 @@ class ColiPackageController extends Controller
             $check_coli_package = ColiPackage::where('parcel_code', $request->code_parcel)->first();
 
             if(!$check_coli_package){
+                $check_coli_by_item = ColiPackage::all('items', 'id', 'package_id');
+                    
+                function objectToArray ($object) {
+                    if(!is_object($object) && !is_array($object))
+                        return $object;
+                    return array_map('objectToArray', (array) $object);
+                }
+
+                foreach ($check_coli_by_item as $key => $value) {
+
+                    $object = substr(objectToArray($value['items']), 1, -1);
+                    $array_object = preg_split('/}",/', $object, -1, PREG_SPLIT_DELIM_CAPTURE);
+                    $length_array = count($array_object); 
+                    if($length_array > 1){
+                        foreach ($array_object as $key => $value) {
+
+                            $value_in_object = "";
+
+                            if($key == $length_array-1){
+                                $value_clean = preg_replace('/\\\"/i', '"', $value);
+                                $value_clean = substr($value_clean, 2);
+                                $value_clean = rtrim($value_clean, '"');
+                                $value_in_object = $value_clean;
+                            }else {
+                                $value_clean = substr_replace($value, '}"', strlen($value), 0);
+                                $value_clean = preg_replace('/\\\"/i', '"', $value_clean);
+                                $value_clean = substr($value_clean, 1);
+                                $value_clean = rtrim($value_clean, '"');
+                                $value_clean = trim($value_clean, '"');
+                                $value_in_object = $value_clean;
+                            }   
+
+                            if (strpos($value_in_object, $request->code_parcel) !== false) {
+                                return response()->json([
+                                    'error'=>false,
+                                    'message' => 'This item is found.', 
+                                    'data'=>$value_in_object,
+                                    'coli_data'=> $check_coli_by_item
+                                ], 200); 
+                            } 
+                        }
+                    }
+                                        
+                }
                 return response()->json([
                     'error'=>false,
                     'message' => 'This parcel is not found.', 
