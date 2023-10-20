@@ -224,22 +224,23 @@ class ColiPackageController extends Controller
     public function check_colis(Request $request)
     {
         try {
-            $check_coli_package = ColiPackage::where('parcel_code', $request->code_parcel)->first();
+            $check_coli_package = ColiPackage::where('parcel_code', $request->code_parcel)
+            ->join('packages', 'packages.id', '=', 'coli_packages.package_id')->first();
 
             if(!$check_coli_package){
-                $check_coli_by_item = ColiPackage::all('items', 'id', 'package_id');
+                $check_coli_by_item = ColiPackage::join('packages', 'packages.id', '=', 'coli_packages.package_id')->get();
                     
                 function objectToArray ($object) {
                     if(!is_object($object) && !is_array($object))
                         return $object;
                     return array_map('objectToArray', (array) $object);
                 }
+                foreach ($check_coli_by_item as $key => $item) {
 
-                foreach ($check_coli_by_item as $key => $value) {
-
-                    $object = substr(objectToArray($value['items']), 1, -1);
+                    $object = substr(objectToArray($item['items']), 1, -1);
                     $array_object = preg_split('/}",/', $object, -1, PREG_SPLIT_DELIM_CAPTURE);
-                    $length_array = count($array_object); 
+                    $length_array = count($array_object);                     
+                    
                     if($length_array > 1){
                         foreach ($array_object as $key => $value) {
 
@@ -263,23 +264,52 @@ class ColiPackageController extends Controller
                                 return response()->json([
                                     'error'=>false,
                                     'message' => 'This item is found.', 
+                                    'is_item' => true, 
                                     'data'=>$value_in_object,
-                                    'coli_data'=> $check_coli_by_item
+                                    'pacakge_info' => ([
+                                        "step" => $item['step'],
+                                        "destination" => $item['destination'],
+                                        "sender" => $item['sender'],
+                                    ])
+
                                 ], 200); 
                             } 
+                        }
+                    }else {
+                        $value_in_object = "";
+
+                        $value_clean = preg_replace('/\\\"/i', '"', $object);
+                        $value_clean = substr($value_clean, 1);
+                        $value_clean = rtrim($value_clean, '"');
+                        $value_in_object = $value_clean;
+
+                        if (strpos($value_in_object, $request->code_parcel) !== false) {
+                            return response()->json([
+                                'error'=>false,
+                                'message' => 'This item is found.', 
+                                'is_item' => true, 
+                                'data'=>$value_in_object,
+                                'pacakge_info' => ([
+                                    "step" => $item['step'],
+                                    "destination" => $item['destination'],
+                                    "sender" => $item['sender'],
+                                ])
+
+                            ], 200); 
                         }
                     }
                                         
                 }
                 return response()->json([
                     'error'=>false,
-                    'message' => 'This parcel is not found.', 
+                    'message' => 'This package is not found.', 
                     'data'=>$check_coli_package
                 ], 200); 
             }else{  
                 return response()->json([
                     'error'=>false,
                     'message'=> 'Parcel found with successfully', 
+                    'is_item' => false, 
                     'data'=>$check_coli_package
                 ], 200);
             }
