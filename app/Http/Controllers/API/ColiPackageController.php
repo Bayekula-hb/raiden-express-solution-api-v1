@@ -308,7 +308,7 @@ class ColiPackageController extends Controller
             }else{  
                 return response()->json([
                     'error'=>false,
-                    'message'=> 'Parcel found with successfully', 
+                    'message'=> 'Colis Package found with successfully', 
                     'is_item' => false, 
                     'data'=>$check_coli_package
                 ], 200);
