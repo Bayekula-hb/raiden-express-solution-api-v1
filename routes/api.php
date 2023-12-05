@@ -3,6 +3,7 @@
 use App\Http\Controllers\API\ColiPackageController;
 use App\Http\Controllers\API\PackageController;
 use App\Http\Controllers\API\ParcelController;
+use App\Http\Controllers\API\TypeTransactionController;
 use App\Http\Controllers\API\TypeUserController;
 use App\Http\Controllers\API\UserController;
 use Illuminate\Http\Request;
@@ -32,47 +33,58 @@ Route::prefix('v1')->group(function () {
     
     Route::prefix('')->middleware(['cors','auth:admin-api'])->group(function () {
         
-        // TypeUser roads
-        Route::prefix('/typeuser')->group( function () {
-            Route::get("", [TypeUserController::class, 'index']);
-            Route::post("", [TypeUserController::class, 'store'])
-                        ->middleware(['validation.typeuser.add']);
-        });
-        
-        // User roads
-        Route::prefix('/user')->group( function () {
-            Route::get("", [UserController::class, 'index']);
-            Route::post("", [UserController::class, 'store'])
-                        ->middleware(['validation.user.add']);
-        });
+        Route::prefix('')->middleware(['user.admin'])->group(function () {
+            // TypeUser roads
+            Route::prefix('/typeuser')->group( function () {
+                Route::get("", [TypeUserController::class, 'index']);
+                Route::post("", [TypeUserController::class, 'store'])
+                            ->middleware(['validation.typeuser.add']);
+            });
+            
+            // User roads
+            Route::prefix('/user')->group( function () {
+                Route::get("", [UserController::class, 'index']);
+                Route::post("", [UserController::class, 'store'])
+                            ->middleware(['validation.user.add']);
+            });
 
-        //Parcel roads
-        Route::prefix('/parcel')->group(function () {
-            Route::get("", [ParcelController::class, 'index']);
-        });
+            //Parcel roads
+            Route::prefix('/parcel')->group(function () {
+                Route::get("", [ParcelController::class, 'index']);
+            });
 
-        //Package roads
-        Route::prefix('/package')->group(function () {
-            Route::get("", [PackageController::class, 'index']);
-            Route::get("/limit", [PackageController::class, 'getLimitedPackage']);
-            Route::get("/{id}", [PackageController::class, 'show']);
-            Route::post("", [PackageController::class, 'store'])
-                        ->middleware(['validation.package']);
-            Route::put("/{id}", [PackageController::class, 'update'])
-                    ->middleware(['validation.package']);  
-        });
+            //Package roads
+            Route::prefix('/package')->group(function () {
+                Route::get("", [PackageController::class, 'index']);
+                Route::get("/limit", [PackageController::class, 'getLimitedPackage']);
+                Route::get("/{id}", [PackageController::class, 'show']);
+                Route::post("", [PackageController::class, 'store'])
+                            ->middleware(['validation.package']);
+                Route::put("/{id}", [PackageController::class, 'update'])
+                        ->middleware(['validation.package']);  
+            });
 
-        //ColiParcel roads
-        Route::prefix('/coli-parcel')->group(function () {  
-            Route::get("", [ColiPackageController::class, 'index']);
-            Route::get("/{id}", [ColiPackageController::class, 'show']);
-            Route::post("", [ColiPackageController::class, 'store'])
-                    ->middleware(['validation.coli']);
-            Route::put("/{id}", [ColiPackageController::class, 'update'])
-                    ->middleware(['validation.coli']);                    
-            Route::delete("/{id}", [ColiPackageController::class, 'destroy']);
-        });
+            //ColiParcel roads
+            Route::prefix('/coli-parcel')->group(function () {  
+                Route::get("", [ColiPackageController::class, 'index']);
+                Route::get("/{id}", [ColiPackageController::class, 'show']);
+                Route::post("", [ColiPackageController::class, 'store'])
+                        ->middleware(['validation.coli']);
+                Route::put("/{id}", [ColiPackageController::class, 'update'])
+                        ->middleware(['validation.coli']);                    
+                Route::delete("/{id}", [ColiPackageController::class, 'destroy']);
+            });
 
+            //ColiParcel roads
+            Route::prefix('/transaction-type')->group(function () {  
+                Route::get("", [TypeTransactionController::class, 'index']);
+                // Route::get("/{id}", [TypeTransactionController::class, 'show']);
+                Route::post("", [TypeTransactionController::class, 'store'])
+                        ->middleware(['validation.typetransaction']);
+                Route::put("/{id}", [TypeTransactionController::class, 'update']);                    
+                // Route::delete("/{id}", [TypeTransactionController::class, 'destroy']);
+            });
+        });
     });
 
     //Auth

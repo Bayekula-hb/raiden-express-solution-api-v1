@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Middleware\API\Parcel;
+namespace App\Http\Middleware\API\TypeTransaction;
 
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class ColiPackageValidationMiddleware
+class TypeTransactionMiddleware
 {
     /**
      * Handle an incoming request.
@@ -16,17 +16,12 @@ class ColiPackageValidationMiddleware
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
     public function handle(Request $request, Closure $next)
-    {        
+    {
+        
         $validated = Validator::make($request->all(), [
-            'items' => ['required', 'min:3'],
-            'weight' => ['required', 'string', 'min:2', 'max:100'],
-            'volume' => ['required', 'string', 'min:2', 'max:100'],
-            'description' => ['min:6'],
-            'sender' => ['required', 'string', 'min:3'],
-            'receives' => ['required', 'string', 'min:3'],
-            'customer_id' => ['required', 'string', 'min:1'],
-            'typetransaction_id' => ['required', 'string', 'min:1'],
-            'destination' => ['required', 'string', 'min:2', 'max:100'],
+            'name_type' => ['required', 'string', 'min:2'],
+            'description_type' => ['required', 'string', 'min:2', 'max:300'],
+            'percentage' => ['required', 'float', 'min:2', 'max:100'],
         ]);
 
         if($validated->fails()){

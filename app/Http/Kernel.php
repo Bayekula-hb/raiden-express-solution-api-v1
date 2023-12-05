@@ -66,10 +66,13 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'validation.auth.user' => \App\Http\Middleware\API\User\UserLoginValidationMiddleware::class,
+        'user.admin' => \App\Http\Middleware\API\User\UserIsAdminMiddleware::class,
         'validation.typeuser.add'=> \App\Http\Middleware\API\TypeUser\TypeUserValidationMiddleware::class,
         'validation.user.add'=> \App\Http\Middleware\API\User\UserValidationMiddleware::class,
         'validation.parcel.id'=> \App\Http\Middleware\API\Parcel\ParcelValidationCheckMiddleware::class,
         'validation.coli'=> \App\Http\Middleware\API\Parcel\ColiPackageValidationMiddleware::class,
+        'validation.typetransaction'=> \App\Http\Middleware\API\TypeTransaction\TypeTransactionMiddleware::class,
+        'validation.typetransaction.id'=> \App\Http\Middleware\API\TypeTransaction\OneTypeTransactionMiddleware::class,
         'validation.package'=> \App\Http\Middleware\API\Package\PackageValidationMiddleware::class,
         'cors'=> \App\Http\Middleware\Cors::class,
     ];

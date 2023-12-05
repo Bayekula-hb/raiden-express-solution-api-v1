@@ -29,6 +29,7 @@ class User extends Authenticatable
         'gender',
         'type_user_id',
         'password',
+        'raiden_point',
     ];
 
     /**

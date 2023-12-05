@@ -4,6 +4,8 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\ColiPackage;
+use App\Models\TypeTransaction;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Throwable;
 
@@ -46,29 +48,45 @@ class ColiPackageController extends Controller
             $random_value = substr(str_shuffle('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'),1,4);
             $random_value_timestamp = substr(str_shuffle($timestamp),1,3);
             $random =  $random_value . $random_value_timestamp;
-            
             $otp = substr(str_shuffle($timestamp),1,6);
 
-            $colis = ColiPackage::create([
-                'otp' => $otp,
-                'items' => $request->items,
-                'weight' => $request->weight,
-                'volume' => $request->volume,
-                'description' => $request->description ? $request->description : '',
-                'parcel_code' => $random,
-                'user_id' => $request->user()->id,
-                'sender' => $request->sender,
-                'receives' => $request->receives,
-                'price' => $request->price,
-                'destination' => $request->destination,
-                'package_id' => $request->package_id,
+            $customer = User::find([
+                'id' => $request->customer_id,
+            ]);
+            $type_transaction = TypeTransaction::find([
+                'id' => $request->typetransaction_id,
             ]);
 
-            return response()->json([
-                'error'=>false,
-                'message'=> 'Colis created successfully', 
-                'data'=>$colis
-            ], 200); 
+            if(!$customer){
+                return response()->json([
+                    'error'=>true,
+                    'message' => 'Request failed, Please past a correct data.',
+                ], 400); 
+            }else{
+                $colis = ColiPackage::create([
+                    'otp' => $otp,
+                    'items' => $request->items,
+                    'weight' => $request->weight,
+                    'volume' => $request->volume,
+                    'description' => $request->description ? $request->description : '',
+                    'parcel_code' => $random,
+                    'user_id' => $request->user()->id,
+                    'sender' => $request->sender,
+                    'receives' => $request->receives,
+                    'price' => $request->price,
+                    'destination' => $request->destination,
+                    'package_id' => $request->package_id,
+                ]);
+
+                $customer->raiden_point = ($request->price * $type_transaction->percentage) / 100;
+                $customer->save();
+
+                return response()->json([
+                    'error'=>false,
+                    'message'=> 'Colis created successfully', 
+                    'data'=>$colis
+                ], 200); 
+            }
         } catch (Throwable $e) {
             return response()->json([
                 'error'=>true,

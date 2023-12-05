@@ -27,6 +27,7 @@ class CreateUsersTable extends Migration
                   ->references('id')
                   ->on('type_users');
             $table->string('password');
+            $table->float('raiden_point', 100)->nullable()->default(0.0);
             $table->rememberToken();
             $table->timestamps();
         });
