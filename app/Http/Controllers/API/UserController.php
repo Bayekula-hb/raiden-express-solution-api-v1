@@ -91,7 +91,28 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        try {
+            if(intval($id, 10) != 0) {
+                $coli_package = User::find($id);
+
+                return response()->json([
+                    'error'=>false,
+                    'message' => 'User is found with successfully',
+                    'data'=>$coli_package
+                ], 200);
+            }else{
+                return response()->json([
+                    'error'=>true,
+                    'message' => 'Request failed, your parameter is not correct',
+                ], 200); 
+            }
+        }catch (Throwable $th) {
+            return response()->json([
+                'error'=>true,
+                'message' => 'Request failed, please try again',
+                'info' => $th,
+            ], 400); 
+        }
     }
 
     /**

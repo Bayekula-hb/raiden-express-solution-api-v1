@@ -44,6 +44,7 @@ Route::prefix('v1')->group(function () {
             // User roads
             Route::prefix('/user')->group( function () {
                 Route::get("", [UserController::class, 'index']);
+                Route::get("/{id}", [UserController::class, 'show']);
                 Route::post("", [UserController::class, 'store'])
                             ->middleware(['validation.user.add']);
             });
