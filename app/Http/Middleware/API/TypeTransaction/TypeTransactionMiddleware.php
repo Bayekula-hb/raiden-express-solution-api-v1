@@ -21,11 +21,11 @@ class TypeTransactionMiddleware
         $validated = Validator::make($request->all(), [
             'name_type' => ['required', 'string', 'min:2'],
             'description_type' => ['required', 'string', 'min:2', 'max:300'],
-            'percentage' => ['required', 'float', 'min:2', 'max:100'],
+            'percentage' => ['required', 'integer', 'min:0'],
         ]);
 
         if($validated->fails()){
-            return response()->json([
+            return response()->json([   
                 'error' => 'true',
                 'message' => 'Please, you can check your data sending',
                 'error_message' => $validated->errors()

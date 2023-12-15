@@ -24,8 +24,8 @@ class ColiPackageValidationMiddleware
             'description' => ['min:6'],
             'sender' => ['required', 'string', 'min:3'],
             'receives' => ['required', 'string', 'min:3'],
-            'customer_id' => ['required', 'string', 'min:1'],
-            'typetransaction_id' => ['required', 'string', 'min:1'],
+            'customer_id' => ['required', 'integer', 'min:1'],
+            'typetransaction_id' => ['required', 'integer', 'min:1'],
             'destination' => ['required', 'string', 'min:2', 'max:100'],
         ]);
 

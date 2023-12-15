@@ -56,7 +56,6 @@ class User extends Authenticatable
     {
         return $this->belongsTo(TypeUser::class);
     }
-
     
     public function parcels(): HasMany
     {
@@ -65,7 +64,11 @@ class User extends Authenticatable
 
     public function coli_packages(): HasMany
     {
-        return $this->HasMany(ColiPackage::class);
+        return $this->HasMany(ColiPackage::class, 'user_id', 'id');
     }
 
+    public function coli_packagesCustomer(): HasMany
+    {
+        return $this->HasMany(ColiPackage::class, 'customer_id', 'id');
+    }
 }

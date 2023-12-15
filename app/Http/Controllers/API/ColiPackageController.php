@@ -76,10 +76,12 @@ class ColiPackageController extends Controller
                     'price' => $request->price,
                     'destination' => $request->destination,
                     'package_id' => $request->package_id,
+                    'type_transaction_id' => $request->typetransaction_id,
+                    'customer_id' => $request->customer_id,
                 ]);
 
-                $customer->raiden_point = ($request->price * $type_transaction->percentage) / 100;
-                $customer->save();
+                $customer[0]->raiden_point = $customer[0]->raiden_point + ($request->price * $type_transaction[0]->percentage) / 100;
+                $customer[0]->save();
 
                 return response()->json([
                     'error'=>false,

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class TypeTransaction extends Model
 {
@@ -35,4 +36,8 @@ class TypeTransaction extends Model
     // {
     //     return $this->HasMany(User::class);
     // }
+    public function coli_packagesCustomer(): HasMany
+    {
+        return $this->HasMany(ColiPackage::class);
+    }
 }

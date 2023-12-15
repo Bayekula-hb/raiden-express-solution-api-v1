@@ -25,6 +25,8 @@ class ColiPackage extends Model
         'receives',
         'destination',
         'package_id',
+        'customer_id',
+        'type_transaction_id',
     ];
 
     protected $hidden = [];
@@ -32,11 +34,21 @@ class ColiPackage extends Model
         
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function customer(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'customer_id', 'id');
     }
 
     public function package(): BelongsTo
     {
         return $this->belongsTo(Package::class);
+    }
+    
+    public function type_transaction(): BelongsTo
+    {
+        return $this->belongsTo(TypeTransaction::class);
     }
 }
