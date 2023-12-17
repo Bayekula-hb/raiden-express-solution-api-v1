@@ -249,6 +249,7 @@ class ColiPackageController extends Controller
 
             if(!$check_coli_package){
                 $check_coli_by_item = ColiPackage::join('packages', 'packages.id', '=', 'coli_packages.package_id')->get();
+
                     
                 function objectToArray ($object) {
                     if(!is_object($object) && !is_array($object))
@@ -281,6 +282,11 @@ class ColiPackageController extends Controller
                             }   
 
                             if (strpos($value_in_object, $request->code_parcel) !== false) {
+                              
+                                $customer = User::find([
+                                    'id' => $item->customer_id,
+                                ])->first();
+
                                 return response()->json([
                                     'error'=>false,
                                     'message' => 'This item is found.', 
@@ -290,7 +296,8 @@ class ColiPackageController extends Controller
                                         "step" => $item['step'],
                                         "destination" => $item['destination'],
                                         "sender" => $item['sender'],
-                                    ])
+                                    ]),
+                                    // 'raiden_point' => $customer->raiden_point,
 
                                 ], 200); 
                             } 
@@ -304,6 +311,11 @@ class ColiPackageController extends Controller
                         $value_in_object = $value_clean;
 
                         if (strpos($value_in_object, $request->code_parcel) !== false) {
+                            
+                            $customer = User::find([
+                                'id' => $item->customer_id,
+                            ])->first();
+
                             return response()->json([
                                 'error'=>false,
                                 'message' => 'This item is found.', 
@@ -313,7 +325,8 @@ class ColiPackageController extends Controller
                                     "step" => $item['step'],
                                     "destination" => $item['destination'],
                                     "sender" => $item['sender'],
-                                ])
+                                ]),
+                                'raiden_point' => $customer->raiden_point,
 
                             ], 200); 
                         }
@@ -326,11 +339,16 @@ class ColiPackageController extends Controller
                     'data'=>$check_coli_package
                 ], 200); 
             }else{  
+                
+                $customer = User::find([
+                    'id' => $check_coli_package->customer_id,
+                ])->first();
                 return response()->json([
                     'error'=>false,
                     'message'=> 'Colis Package found with successfully', 
                     'is_item' => false, 
-                    'data'=>$check_coli_package
+                    'data'=>$check_coli_package,
+                    'raiden_point' => $customer->raiden_point,
                 ], 200);
             }
             
