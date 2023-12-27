@@ -241,6 +241,7 @@ class UserController extends Controller
                            'gender' => $user_find->gender,
                            'id' => $user_find->id,
                            'type_account' => $user_find->type_user_id,
+                           'raiden_point' => $user_find->raiden_point,
                         ], 
                     ], 200);
                 } else {
