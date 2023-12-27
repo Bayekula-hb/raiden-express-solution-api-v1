@@ -33,6 +33,10 @@ Route::prefix('v1')->group(function () {
     
     Route::prefix('')->middleware(['cors','auth:admin-api'])->group(function () {
         
+        //update Password    
+        Route::post("/user/update-password", [UserController::class, 'updatePassword'])
+        ->middleware(['validation.password.update']);
+        
         Route::prefix('')->middleware(['user.admin'])->group(function () {
             // TypeUser roads
             Route::prefix('/typeuser')->group( function () {
@@ -95,11 +99,6 @@ Route::prefix('v1')->group(function () {
     //Signup    
     Route::post("/signup", [UserController::class, 'signup'])
                 ->middleware(['validation.user.add.phone']);
-
-    
-    //update Password    
-    Route::post("/user/update-password", [UserController::class, 'updatePassword'])
-                ->middleware(['validation.password.update']);
 
     // User roads
     Route::prefix('/check_parcel')->group( function () {
