@@ -69,6 +69,8 @@ class Kernel extends HttpKernel
         'user.admin' => \App\Http\Middleware\API\User\UserIsAdminMiddleware::class,
         'validation.typeuser.add'=> \App\Http\Middleware\API\TypeUser\TypeUserValidationMiddleware::class,
         'validation.user.add'=> \App\Http\Middleware\API\User\UserValidationMiddleware::class,
+        'validation.user.add.phone'=> \App\Http\Middleware\API\User\UserValidationMiddlewarePhone::class,
+        'validation.password.update'=> \App\Http\Middleware\API\User\UserUpdatePasswordMiddleware::class,
         'validation.parcel.id'=> \App\Http\Middleware\API\Parcel\ParcelValidationCheckMiddleware::class,
         'validation.coli'=> \App\Http\Middleware\API\Parcel\ColiPackageValidationMiddleware::class,
         'validation.typetransaction'=> \App\Http\Middleware\API\TypeTransaction\TypeTransactionMiddleware::class,

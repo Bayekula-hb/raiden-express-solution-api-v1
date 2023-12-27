@@ -47,6 +47,10 @@ Route::prefix('v1')->group(function () {
                 Route::get("/{id}", [UserController::class, 'show']);
                 Route::post("", [UserController::class, 'store'])
                             ->middleware(['validation.user.add']);
+                
+                //update Password    
+                Route::post("/update-password", [UserController::class, 'updatePassword'])
+                            ->middleware(['validation.password.update']);
             });
 
             //Parcel roads
@@ -90,6 +94,10 @@ Route::prefix('v1')->group(function () {
 
     //Auth
     Route::post('/auth/login', [UserController::class, 'auth'])->middleware(['validation.auth.user']);
+
+    //Signup    
+    Route::post("/signup", [UserController::class, 'signup'])
+                ->middleware(['validation.user.add.phone']);
 
     // User roads
     Route::prefix('/check_parcel')->group( function () {
