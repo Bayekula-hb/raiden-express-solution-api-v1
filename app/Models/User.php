@@ -71,4 +71,13 @@ class User extends Authenticatable
     {
         return $this->HasMany(ColiPackage::class, 'customer_id', 'id');
     }
+
+    public function money_transUser(): HasMany
+    {
+        return $this->HasMany(MoneyTrans::class, 'user_id', 'id');
+    }
+    public function money_transCustomer(): HasMany
+    {
+        return $this->HasMany(MoneyTrans::class, 'customer_id', 'id');
+    }
 }

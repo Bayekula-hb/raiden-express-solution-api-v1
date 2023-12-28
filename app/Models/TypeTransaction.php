@@ -40,4 +40,9 @@ class TypeTransaction extends Model
     {
         return $this->HasMany(ColiPackage::class);
     }
+
+    public function moneyTransCustomer(): HasMany
+    {
+        return $this->HasMany(MoneyTrans::class);
+    }
 }

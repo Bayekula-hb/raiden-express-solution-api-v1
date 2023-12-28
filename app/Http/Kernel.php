@@ -73,6 +73,7 @@ class Kernel extends HttpKernel
         'validation.password.update'=> \App\Http\Middleware\API\User\UserUpdatePasswordMiddleware::class,
         'validation.parcel.id'=> \App\Http\Middleware\API\Parcel\ParcelValidationCheckMiddleware::class,
         'validation.coli'=> \App\Http\Middleware\API\Parcel\ColiPackageValidationMiddleware::class,
+        'validation.moneytrans'=> \App\Http\Middleware\API\MoneyTrans\MoneyTransValidationMiddleware::class,
         'validation.typetransaction'=> \App\Http\Middleware\API\TypeTransaction\TypeTransactionMiddleware::class,
         'validation.typetransaction.id'=> \App\Http\Middleware\API\TypeTransaction\OneTypeTransactionMiddleware::class,
         'validation.package'=> \App\Http\Middleware\API\Package\PackageValidationMiddleware::class,
