@@ -4,6 +4,7 @@ use App\Http\Controllers\API\ColiPackageController;
 use App\Http\Controllers\API\MoneyTransController;
 use App\Http\Controllers\API\PackageController;
 use App\Http\Controllers\API\ParcelController;
+use App\Http\Controllers\API\RoutingTransMoneyController;
 use App\Http\Controllers\API\TypeTransactionController;
 use App\Http\Controllers\API\TypeUserController;
 use App\Http\Controllers\API\UserController;
@@ -91,6 +92,17 @@ Route::prefix('v1')->group(function () {
                 Route::put("/{id}", [MoneyTransController::class, 'update'])
                         ->middleware(['validation.moneytrans']);                    
                 Route::delete("/{id}", [MoneyTransController::class, 'destroy']);
+            });
+
+            //Money Trans roads
+            Route::prefix('/routing-trans-money')->group(function () {  
+                Route::get("", [RoutingTransMoneyController::class, 'index']);
+                Route::get("/{id}", [RoutingTransMoneyController::class, 'show']);
+                Route::post("", [RoutingTransMoneyController::class, 'store'])
+                        ->middleware(['validation.moneytransmoney']);
+                Route::put("/{id}", [RoutingTransMoneyController::class, 'update'])
+                        ->middleware(['validation.moneytransmoney.id']);                    
+                Route::delete("/{id}", [RoutingTransMoneyController::class, 'destroy']);
             });
 
             //ColiParcel roads

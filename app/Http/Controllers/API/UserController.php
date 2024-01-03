@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\MoneyTrans;
 use App\Models\TypeUser;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -226,6 +227,33 @@ class UserController extends Controller
             if( $user_find){
                 if (Hash::check($request->password, $user_find->password)) {
  
+                    $trans_money = MoneyTrans::where('customer_id', $user_find->id)->orderBy('id', 'desc')->get();
+                    $moneyTrans =[];
+
+                    foreach ($trans_money as $key => $value) {
+
+                        $sender = User::find([
+                            'id' => $value->customer_id,
+                        ])->first(); 
+
+                        $data = [
+                            'id' => $value->id,
+                            'otp' => $value->otp,
+                            'costs' => $value->costs,
+                            'amount_send' => $value->amount_send,
+                            'customer_id' => $value->customer_id,
+                            'receives' => $value->receives,
+                            'step' => $value->step,
+                            'destination' => $value->destination,
+                            'destination' => $value->destination,
+                            'sender' => [
+                                'names' => $sender->first_name . ' ' . $sender->last_name,
+                                'phone_number' => $sender->phone_number,
+                            ],
+                        ];
+                        array_push($moneyTrans, $data);
+                    }
+
                     $token = $user_find->createToken($user_find->email);
 
                     return response()->json([
@@ -242,6 +270,7 @@ class UserController extends Controller
                            'id' => $user_find->id,
                            'type_account' => $user_find->type_user_id,
                            'raiden_point' => $user_find->raiden_point,
+                           'transactions_money' => $moneyTrans
                         ], 
                     ], 200);
                 } else {

@@ -33,6 +33,9 @@ class CreateMoneyTransTable extends Migration
             $table->foreignId('customer_id')
                   ->references('id')
                   ->on('users');
+            $table->foreignId('routing_trans_money_id')
+                  ->references('id')
+                  ->on('routing_trans_moneys');
             $table->timestamps();
         });
     }

@@ -22,6 +22,7 @@ class MoneyTrans extends Model
         'destination',
         'customer_id',
         'type_transaction_id',
+        'routing_trans_money_id',
     ];
 
     protected $hidden = [];
@@ -40,5 +41,10 @@ class MoneyTrans extends Model
     public function type_transaction(): BelongsTo
     {
         return $this->belongsTo(TypeTransaction::class);
+    }
+    
+    public function routing_trans_money(): BelongsTo
+    {
+        return $this->belongsTo(RoutingTransMoney::class);
     }
 }

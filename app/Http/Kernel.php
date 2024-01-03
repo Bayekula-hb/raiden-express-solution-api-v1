@@ -76,6 +76,8 @@ class Kernel extends HttpKernel
         'validation.moneytrans'=> \App\Http\Middleware\API\MoneyTrans\MoneyTransValidationMiddleware::class,
         'validation.typetransaction'=> \App\Http\Middleware\API\TypeTransaction\TypeTransactionMiddleware::class,
         'validation.typetransaction.id'=> \App\Http\Middleware\API\TypeTransaction\OneTypeTransactionMiddleware::class,
+        'validation.moneytransmoney'=> \App\Http\Middleware\API\RoutingTransMoney\RoutingTransMoneyMiddleware::class,
+        'validation.moneytransmoney.id'=> \App\Http\Middleware\API\RoutingTransMoney\RoutingTransMoneyMiddleware::class,
         'validation.package'=> \App\Http\Middleware\API\Package\PackageValidationMiddleware::class,
         'cors'=> \App\Http\Middleware\Cors::class,
     ];
