@@ -36,6 +36,7 @@ class CreateMoneyTransTable extends Migration
             $table->foreignId('routing_trans_money_id')
                   ->references('id')
                   ->on('routing_trans_moneys');
+            $table->boolean('using_raiden_point')->default(false);
             $table->timestamps();
         });
     }

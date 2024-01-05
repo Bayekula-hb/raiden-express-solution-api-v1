@@ -63,6 +63,9 @@ class ColiPackageController extends Controller
                     'message' => 'Request failed, Please past a correct data.',
                 ], 400); 
             }else{
+                                
+                $new_price = $request->using_raiden_point == 'true' ? (float)$request->price - ((float)$request->price / 100 * 5) : $request->price;
+                
                 $colis = ColiPackage::create([
                     'otp' => $otp,
                     'items' => $request->items,
@@ -73,14 +76,20 @@ class ColiPackageController extends Controller
                     'user_id' => $request->user()->id,
                     'sender' => $request->sender,
                     'receives' => $request->receives,
-                    'price' => $request->price,
+                    'price' => $new_price,
                     'destination' => $request->destination,
                     'package_id' => $request->package_id,
                     'type_transaction_id' => $request->typetransaction_id,
                     'customer_id' => $request->customer_id,
+                    'using_raiden_point' => $request->using_raiden_point,
                 ]);
 
-                $customer[0]->raiden_point = $customer[0]->raiden_point + ($request->price * $type_transaction[0]->percentage) / 100;
+                if($request->using_raiden_point == 'true'){
+                    $customer[0]->raiden_point = $customer[0]->raiden_point - (((float)$request->price / 100 * 5) * 500);
+                    $customer[0]->save();
+                }
+
+                $customer[0]->raiden_point = $customer[0]->raiden_point + ( $new_price * $type_transaction[0]->percentage) / 100;
                 $customer[0]->save();
 
                 return response()->json([

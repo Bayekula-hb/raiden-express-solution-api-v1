@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\ColiPackage;
 use App\Models\MoneyTrans;
+use App\Models\RoutingTransMoney;
 use App\Models\TypeTransaction;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -29,6 +30,10 @@ class MoneyTransController extends Controller
                     'id' => $value->customer_id,
                 ])->first(); 
 
+                $destination = RoutingTransMoney::find([
+                    'id' => $value->destination,
+                ])->first(); 
+
                 $data = [
                     'id' => $value->id,
                     'otp' => $value->otp,
@@ -37,8 +42,8 @@ class MoneyTransController extends Controller
                     'customer_id' => $value->customer_id,
                     'receives' => $value->receives,
                     'step' => $value->step,
-                    'destination' => $value->destination,
-                    'destination' => $value->destination,
+                    'destination' => $destination->description_routing_trans,
+                    'destination_id' => $value->destination,
                     'sender' => [
                         'names' => $sender->first_name . ' ' . $sender->last_name,
                         'phone_number' => $sender->phone_number,
@@ -96,10 +101,17 @@ class MoneyTransController extends Controller
                     'user_id' => $request->user()->id,
                     'receives' => $request->receives,
                     'destination' => $request->destination,
+                    'routing_trans_money_id' => $request->destination,
                     'type_transaction_id' => $request->typetransaction_id,
                     'customer_id' => $request->customer_id,
                     'step' => $request->step,
+                    'using_raiden_point' => $request->using_raiden_point,
                 ]);
+
+                if($request->using_raiden_point == 'true'){
+                    $customer->raiden_point = $customer->raiden_point - (((float)$request->costs / 100 * 5) * 500);
+                    $customer->save();
+                }
 
                 $customer->raiden_point = $customer->raiden_point + ($request->amount_send * $type_transaction->percentage) / 100;
                 $customer->save();

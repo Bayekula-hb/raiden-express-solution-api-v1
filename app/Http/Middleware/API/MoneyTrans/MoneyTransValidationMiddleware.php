@@ -20,11 +20,11 @@ class MoneyTransValidationMiddleware
         $validated = Validator::make($request->all(), [
             'step' => ['required'],
             'amount_send' => ['required', 'string'],
-            'costs' => ['required', 'string'],
+            'costs' => ['required', 'numeric'],
             'receives' => ['required', 'string', 'min:3'],
             'customer_id' => ['required', 'integer', 'min:1'],
             'typetransaction_id' => ['required', 'integer', 'min:1'],
-            'destination' => ['required', 'string', 'min:2', 'max:100'],
+            'destination' => ['required'],
         ]);
 
         if($validated->fails()){

@@ -27,6 +27,7 @@ class ColiPackage extends Model
         'package_id',
         'customer_id',
         'type_transaction_id',
+        'using_raiden_point',
     ];
 
     protected $hidden = [];

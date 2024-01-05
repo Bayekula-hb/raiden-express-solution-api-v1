@@ -23,6 +23,7 @@ class MoneyTrans extends Model
         'customer_id',
         'type_transaction_id',
         'routing_trans_money_id',
+        'using_raiden_point',
     ];
 
     protected $hidden = [];

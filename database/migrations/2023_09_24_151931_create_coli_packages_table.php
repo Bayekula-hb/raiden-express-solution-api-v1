@@ -43,6 +43,7 @@ class CreateColiPackagesTable extends Migration
             $table->foreignId('customer_id')
                   ->references('id')
                   ->on('users');
+            $table->boolean('using_raiden_point')->default(false);
             // $table->foreignId('user_id')
             //       ->references('id')
             //       ->on('users');

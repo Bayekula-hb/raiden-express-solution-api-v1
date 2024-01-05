@@ -27,6 +27,7 @@ class ColiPackageValidationMiddleware
             'customer_id' => ['required', 'integer', 'min:1'],
             'typetransaction_id' => ['required', 'integer', 'min:1'],
             'destination' => ['required', 'string', 'min:2', 'max:100'],
+            'using_raiden_point' => ['required', 'boolean'],
         ]);
 
         if($validated->fails()){
