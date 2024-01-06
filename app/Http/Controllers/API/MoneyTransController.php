@@ -84,9 +84,16 @@ class MoneyTransController extends Controller
             $customer = User::find([
                 'id' => $request->customer_id,
             ])->first();
+
             $type_transaction = TypeTransaction::find([
                 'id' => $request->typetransaction_id,
             ])->first();
+
+            $routing_trans_money = RoutingTransMoney::find([
+                'id' => $request->destination,
+            ])->first();
+
+            $remaining_point = $customer->raiden_point - (((float)$request->amount_send * $routing_trans_money->percentage_routing_trans / 100) * 500);
 
             if(!$customer){
                 return response()->json([
@@ -96,7 +103,8 @@ class MoneyTransController extends Controller
             }else{
                 $money_trans = MoneyTrans::create([
                     'otp' => $otp,
-                    'costs' => $request->costs,
+                    'costs' => $remaining_point >= 0 ? 0 : $remaining_point * (-1) / 500,
+                    // 'costs' => $request->costs,
                     'amount_send' => $request->amount_send,
                     'user_id' => $request->user()->id,
                     'receives' => $request->receives,
@@ -109,11 +117,14 @@ class MoneyTransController extends Controller
                 ]);
 
                 if($request->using_raiden_point == 'true'){
-                    $customer->raiden_point = $customer->raiden_point - (((float)$request->costs / 100 * 5) * 500);
+                    // $customer->raiden_point = $customer->raiden_point - (((float)$request->costs / 100 * 5) * 500);
+
+                    $customer->raiden_point = $remaining_point >= 0 ? $remaining_point : 0;
+                    // $customer->raiden_point = $customer->raiden_point - (((float)$request->costs * $routing_trans_money->percentage_routing_trans / 100 * 5) * 500);
                     $customer->save();
                 }
 
-                $customer->raiden_point = $customer->raiden_point + ($request->amount_send * $type_transaction->percentage) / 100;
+                $customer->raiden_point = $customer->raiden_point + (($request->amount_send * $type_transaction->percentage) / 100);
                 $customer->save();
 
                 return response()->json([

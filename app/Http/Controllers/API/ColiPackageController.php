@@ -64,8 +64,13 @@ class ColiPackageController extends Controller
                 ], 400); 
             }else{
                                 
-                $new_price = $request->using_raiden_point == 'true' ? (float)$request->price - ((float)$request->price / 100 * 5) : $request->price;
                 
+                $remaining_point = ($customer[0]->raiden_point / 500) - (float)$request->price_original;                
+                // price: usingRaidenPoint + '' == 'true' ? $remaining_point >= 0 ? 0 : $remaining_point * (-1) : (float)$request->price, 
+
+                $new_price = $request->using_raiden_point == 'true' ? ($remaining_point >= 0 ? 0 : $remaining_point * (-1)) : (float)$request->price_original;
+                // $new_price = $request->using_raiden_point == 'true' ? (float)$request->price - ((float)$request->price / 100 * 5) : $request->price;
+
                 $colis = ColiPackage::create([
                     'otp' => $otp,
                     'items' => $request->items,
@@ -85,7 +90,9 @@ class ColiPackageController extends Controller
                 ]);
 
                 if($request->using_raiden_point == 'true'){
-                    $customer[0]->raiden_point = $customer[0]->raiden_point - (((float)$request->price / 100 * 5) * 500);
+
+                    $customer[0]->raiden_point = $remaining_point >= 0 ? $remaining_point : 0;
+                    // $customer[0]->raiden_point = $customer[0]->raiden_point - (((float)$request->price / 100 * 5) * 500);
                     $customer[0]->save();
                 }
 
