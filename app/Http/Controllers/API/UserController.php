@@ -126,9 +126,9 @@ class UserController extends Controller
     {
        
         try {
-            $typeuser_found = TypeUser::all()->where('id', '=', $request->type_user_id);
+            // $typeuser_found = TypeUser::all()->where('name_type', '=', 'customer');
             
-            if( sizeof($typeuser_found) > 0 ){
+            // if( sizeof($typeuser_found) > 0 ){
 
 
                 // On crée un nouvel utilisateur
@@ -149,12 +149,12 @@ class UserController extends Controller
                     'message'=> 'User created successfully', 
                     'data'=>$user
                 ], 200); 
-            }else{
-                return response()->json([
-                    'error'=>true,
-                    'message' => 'Le type d\'utilisateur ayant cet id : ' . $request->type_user_id .' , n\'existe pas',
-                ], 400); 
-            }
+            // }else{
+            //     return response()->json([
+            //         'error'=>true,
+            //         'message' => 'Le type d\'utilisateur ayant cet id : ' . $request->type_user_id .' , n\'existe pas',
+            //     ], 400); 
+            // }
         } catch (Throwable $e) {
             return response()->json([
                 'error'=>true,
