@@ -123,6 +123,8 @@ Route::prefix('v1')->group(function () {
     //Signup    
     Route::post("/signup", [UserController::class, 'signup'])
                 ->middleware(['validation.user.add.phone']);
+    //Reset Password    
+    Route::post("/reset-password", [UserController::class, 'resetPassword']);
 
     // User roads
     Route::prefix('/check_parcel')->group( function () {

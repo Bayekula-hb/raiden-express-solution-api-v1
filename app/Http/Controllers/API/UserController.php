@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\MoneyTrans;
 use App\Models\TypeUser;
 use App\Models\User;
+use App\Notifications\SendNewPasswordToUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Throwable;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -109,6 +111,45 @@ class UserController extends Controller
         } catch (Throwable $e) {
             return response()->json([
                 'error'=>true,
+                'message' => 'Request failed, please try again',
+                'data' => $e,
+            ], 400);        
+        }
+    }
+
+    /**
+     * Reset user password.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function resetPassword(Request $request)
+    {
+        
+                
+        try {
+        
+            $user = User::where(
+                'email', $request->email
+            )->first();
+
+            if($user){
+                $randomString = Str::random(8); 
+                
+
+                $user->password = Hash::make($randomString);
+
+                $user->notify(new SendNewPasswordToUser($randomString));
+                
+                return response()->json([
+                    'error'=>false,
+                    'message'=> 'Password updated successfully', 
+                    'data'=>$user,
+                ], 200);
+            }
+        } catch (Throwable $e) {
+            return response()->json([
+                'error'=> true,
                 'message' => 'Request failed, please try again',
                 'data' => $e,
             ], 400);        
