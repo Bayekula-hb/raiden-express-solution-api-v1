@@ -138,6 +138,7 @@ class UserController extends Controller
                 
 
                 $user->password = Hash::make($randomString);
+                $user->save();
 
                 $user->notify(new SendNewPasswordToUser($randomString));
                 
