@@ -22,7 +22,8 @@ class UserController extends Controller
     public function index()
     {
         try {   
-            $users = User::all();
+            $users = User::orderBy('id', 'desc')->get();
+            // $users = User::all();
 
             return response()->json([
                 'error'=>false,
