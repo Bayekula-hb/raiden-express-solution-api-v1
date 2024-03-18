@@ -20,7 +20,7 @@ class UserIsAdminMiddleware
     {
         $type_user = TypeUser::find([ 'id' => $request->user()->type_user_id]);
 
-        if($type_user[0]->name_type != 'admin'){
+        if($type_user[0]->name_type != 'admin' && $type_user[0]->name_type != 'supervisor'){
             return response()->json([
                 'error' => true,
                 'message' => 'Unauthorized'
