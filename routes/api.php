@@ -115,6 +115,8 @@ Route::prefix('v1')->group(function () {
                 // Route::delete("/{id}", [TypeTransactionController::class, 'destroy']);
             });
         });
+
+        Route::get("/get-coli-package", [ColiPackageController::class, 'getAllPackageByUser']);
     });
 
     //Auth

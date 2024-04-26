@@ -376,4 +376,28 @@ class ColiPackageController extends Controller
             ], 400); 
         }
     }
+
+        /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllPackageByUser(Request $request)
+    {
+        try {   
+            $coli_packages = ColiPackage::orderBy('id', 'desc')->where('customer_id', $request->user()->id)->get();
+
+            return response()->json([
+                'error'=>false,
+                'message'=> 'Data received successfully', 
+                'data'=>$coli_packages
+            ], 200);
+        } catch (Throwable $e) {
+            return response()->json([
+                'error'=>true,
+                'message' => 'Request failed, please try again',
+                'data' => $e,
+            ], 400);
+        }
+    }
 }
