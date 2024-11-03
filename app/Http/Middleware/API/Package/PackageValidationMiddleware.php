@@ -21,9 +21,9 @@ class PackageValidationMiddleware
             'name_package' => ['required', 'min:3', 'max:100'],
             'destination_package' => ['required', 'string', 'min:2', 'max:100'],
             'description' => ['min:6'],
-            'departure_date' => ['required', 'date'],
-            'arrival_date' => ['required', 'date'],
-            'step' => ['required', 'string', 'min:3'],
+            'departure_date' => ['date'],
+            'arrival_date' => ['date'],
+            'step' => ['string', 'min:3'],
         ]);
 
         if($validated->fails()){
